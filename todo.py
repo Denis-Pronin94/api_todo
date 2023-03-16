@@ -1,52 +1,71 @@
-import sqlite3
-import os
+from flask import Flask, request
 
-from flask import Flask, render_template, request, g
+from models import TasksDB
 
-DATA_BASE = 'todo.db'
-DEBUG = True
-SECRET_KEY = 'ffdsfvdsrwrew432423@%$fsdf,sd'
+from peewee import DataError
 
+from pydantic import ValidationError
+
+from schema import CreateNewTask, UpdateTask
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict(DATA_BASE=os.path.join(app.root_path, 'todo.db')))
+
+@app.route('/tasks/', methods=['PUT'])
+def create_new_task() -> [list, int]:
+    """Эндпоинт создания таски."""
+    try:
+        task = CreateNewTask.parse_obj(request.json)
+        values = TasksDB.create(title=task.name, status=1)
+        return list(TasksDB.select().where(TasksDB.id == values.id).dicts()), 201
+    except ValidationError:
+        return 'Ошибка в ключе.', 400
+    except DataError:
+        return 'Слишком длинное значение ключа. Ключ может быть максимум 250 символов.', 400
 
 
-def connect_db():
-    conn = sqlite3.connect(app.config['DATA_BASE'])
-    conn.row_factory = sqlite3.Row
-    return conn
+@app.route('/tasks', methods=['GET'])
+def get_all_task() -> [list, int]:
+    """Эндпоинт получения всех тасок."""
+    return list(TasksDB.select().dicts()), 200
 
 
-def create_db():
-    """Вспомомгательная функция для создания таблиц БД."""
-    db = connect_db()
-    with app.open_resource('sq_db.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
-    db.close()
+@app.route('/tasks/<int:task_id>', methods=['POST'])
+def update_task_status(task_id: int) -> [list, int]:
+    """Эндпоинт обнвления статуса таски."""
+    try:
+        new_status = UpdateTask.parse_obj(request.json)
+        valid_status = [1, 2, 3, 4]
+        result_status = valid_status.count(new_status.status)
+        if result_status > 0:
+            list_id = list(TasksDB.select(TasksDB.id).dicts())
+            value_task_id = {'id': task_id}
+            result = list_id.count(value_task_id)
+            if result > 0:
+                d = TasksDB.update(status=new_status.status).where(TasksDB.id == task_id)
+                d.execute()
+                return list(TasksDB.select().where(TasksDB.id == task_id).dicts()), 200
+            else:
+                return {'error': 'task with id=' + str(task_id) + ' does not exist'}, 400
+        else:
+            return {'error': 'wrong status'}, 400
+    except ValidationError:
+        return 'Некорректное значение ключа.', 400
 
 
-def get_db():
-    """Соединение с БД, если оно еще не установлено."""
-    if not hasattr(g, 'link_db'):
-        g.link_db = connect_db()
-    return g.link_db
-
-
-@app.route('/')
-def index():
-    db = get_db()
-    return 'index'
-
-
-@app.teardown_appcontext
-def close_db(error):
-    """Закрываем соединение с БД, если оно было установлено."""
-    if hasattr(g, 'link_db'):
-        g.link_db.close()
+@app.route('/tasks/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id: int) -> [list, int]:
+    """Эндпоинт удаления таски."""
+    list_id = list(TasksDB.select(TasksDB.id).dicts())
+    value_task_id = {'id': task_id}
+    result = list_id.count(value_task_id)
+    if result > 0:
+        delete = TasksDB.delete().where(TasksDB.id == task_id)
+        delete.execute()
+        return '', 204
+    else:
+        return {'error': 'task with id=' + str(task_id) + ' does not exist'}, 400
 
 
 if __name__ == '__main__':
