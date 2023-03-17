@@ -1,0 +1,5 @@
+NAME: __required__
+USER: __required__
+PASSWORD: __required__
+HOST: __required__
+PORT: 5432

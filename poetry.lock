@@ -85,6 +85,28 @@ files = [
 ]
 
 [[package]]
+name = "dynaconf"
+version = "3.1.12"
+description = "The dynamic configurator for your Python Project"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "dynaconf-3.1.12-py2.py3-none-any.whl", hash = "sha256:a79d7b3ad4a35af9b576c49f11cd3b23a1b04b87b63a4e9f92cc82f2b0cafeeb"},
+    {file = "dynaconf-3.1.12.tar.gz", hash = "sha256:11a60bcd735f82b8a47b288f99e4ffbbd08c6c130a7be93c5d03e93fc260a5e1"},
+]
+
+[package.extras]
+all = ["configobj", "hvac", "redis", "ruamel.yaml"]
+configobj = ["configobj"]
+ini = ["configobj"]
+redis = ["redis"]
+test = ["codecov", "configobj", "django", "flake8", "flake8-debugger", "flake8-print", "flake8-todo", "flask (>=0.12)", "hvac", "pep8-naming", "pytest", "pytest-cov", "pytest-mock", "pytest-xdist", "python-dotenv", "radon", "redis", "toml"]
+toml = ["toml"]
+vault = ["hvac"]
+yaml = ["ruamel.yaml"]
+
+[[package]]
 name = "entrypoints"
 version = "0.4"
 description = "Discover and load entry points from installed packages."
@@ -487,6 +509,18 @@ python-versions = ">=3.7"
 files = [
     {file = "packaging-23.0-py3-none-any.whl", hash = "sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2"},
     {file = "packaging-23.0.tar.gz", hash = "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"},
+]
+
+[[package]]
+name = "password"
+version = "0.2"
+description = "A password attribute that stores hashes"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "password-0.2.tar.bz2", hash = "sha256:9ad8ed238c0c3f929778bc82237ecfd333a1b7357b5864bce7d7b5cd2b039b19"},
+    {file = "password-0.2.zip", hash = "sha256:c1502353c1c5c0541c0625b4f71255eb1b06e72b8146963a08ea3aa340c0bf53"},
 ]
 
 [[package]]
@@ -912,4 +946,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "32bc72c618f9e53079b04556bf198bfa755ef6032ee763ba81558254045465d6"
+content-hash = "508cc1790a808aefb9c4f1c7e09a9b086fca25a5eef795ee8454501e2d36c627"

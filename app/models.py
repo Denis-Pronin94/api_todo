@@ -9,7 +9,9 @@ from peewee import (
     PrimaryKeyField,
 )
 
-db = PostgresqlDatabase('todo_app', user='hulk', password='docker', host='127.0.0.1', port=5432)
+from app.config import NAME, USER, PASSWORD, HOST, PORT
+
+db = PostgresqlDatabase(NAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
 
 
 class BaseModel(Model):

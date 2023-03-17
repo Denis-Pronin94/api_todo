@@ -8,6 +8,6 @@ class CreateNewTask(BaseModel):
 
 
 class UpdateTask(BaseModel):
-    """Schema create new task."""
+    """Schema update status task."""
 
     status: int

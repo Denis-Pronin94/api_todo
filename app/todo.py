@@ -1,12 +1,14 @@
+from http import HTTPStatus
+
 from flask import Flask, request
 
-from models import TasksDB
+from app.models import TasksDB
 
 from peewee import DataError
 
 from pydantic import ValidationError
 
-from schema import CreateNewTask, UpdateTask
+from app.schema import CreateNewTask, UpdateTask
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -18,17 +20,23 @@ def create_new_task() -> [list, int]:
     try:
         task = CreateNewTask.parse_obj(request.json)
         values = TasksDB.create(title=task.name, status=1)
-        return list(TasksDB.select().where(TasksDB.id == values.id).dicts()), 201
-    except ValidationError:
-        return 'Ошибка в ключе.', 400
-    except DataError:
-        return 'Слишком длинное значение ключа. Ключ может быть максимум 250 символов.', 400
+        # return list(TasksDB.select().where(TasksDB.id == values.id).dicts()), HTTPStatus.CREATED
+        return dict(
+            id=values.id,
+            title=values.title,
+            status=values.status,
+            updated_at=values.updated_at
+        ), HTTPStatus.CREATED
+    except ValidationError as e:
+        return str(e), HTTPStatus.BAD_REQUEST
+    except DataError as err:
+        return str(err), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/tasks', methods=['GET'])
 def get_all_task() -> [list, int]:
     """Эндпоинт получения всех тасок."""
-    return list(TasksDB.select().dicts()), 200
+    return list(TasksDB.select().dicts()), HTTPStatus.OK
 
 
 @app.route('/tasks/<int:task_id>', methods=['POST'])
@@ -45,13 +53,13 @@ def update_task_status(task_id: int) -> [list, int]:
             if result > 0:
                 d = TasksDB.update(status=new_status.status).where(TasksDB.id == task_id)
                 d.execute()
-                return list(TasksDB.select().where(TasksDB.id == task_id).dicts()), 200
+                return list(TasksDB.select().where(TasksDB.id == task_id).dicts()), HTTPStatus.OK
             else:
-                return {'error': 'task with id=' + str(task_id) + ' does not exist'}, 400
+                return {'error': 'task with id=' + str(task_id) + ' does not exist'}, HTTPStatus.BAD_REQUEST
         else:
-            return {'error': 'wrong status'}, 400
-    except ValidationError:
-        return 'Некорректное значение ключа.', 400
+            return {'error': 'wrong status'}, HTTPStatus.BAD_REQUEST
+    except ValidationError as err:
+        return str(err), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
@@ -63,9 +71,9 @@ def delete_task(task_id: int) -> [list, int]:
     if result > 0:
         delete = TasksDB.delete().where(TasksDB.id == task_id)
         delete.execute()
-        return '', 204
+        return '', HTTPStatus.NO_CONTENT
     else:
-        return {'error': 'task with id=' + str(task_id) + ' does not exist'}, 400
+        return {'error': 'task with id=' + str(task_id) + ' does not exist'}, HTTPStatus.BAD_REQUEST
 
 
 if __name__ == '__main__':
