@@ -44,7 +44,7 @@ def update_task_status(task_id: int) -> [list, int]:
     try:
         new_status = UpdateTask.parse_obj(request.json)
         valid_status = [1, 2, 3, 4]
-        result_status = valid_status.count(new_status.status)
+        result_status = new_status.status in valid_status
         if result_status > 0:
             list_id = list(TasksDB.select(TasksDB.id).where(TasksDB.id == task_id).dicts())
             value_task_id = {'id': task_id}
