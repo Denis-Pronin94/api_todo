@@ -20,7 +20,6 @@ def create_new_task() -> [list, int]:
     try:
         task = CreateNewTask.parse_obj(request.json)
         values = TasksDB.create(title=task.name, status=1)
-        # return list(TasksDB.select().where(TasksDB.id == values.id).dicts()), HTTPStatus.CREATED
         return dict(
             id=values.id,
             title=values.title,
@@ -47,7 +46,7 @@ def update_task_status(task_id: int) -> [list, int]:
         valid_status = [1, 2, 3, 4]
         result_status = valid_status.count(new_status.status)
         if result_status > 0:
-            list_id = list(TasksDB.select(TasksDB.id).dicts())
+            list_id = list(TasksDB.select(TasksDB.id).where(TasksDB.id == task_id).dicts())
             value_task_id = {'id': task_id}
             result = list_id.count(value_task_id)
             if result > 0:
