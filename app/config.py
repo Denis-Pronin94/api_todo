@@ -1,4 +1,3 @@
-
 from dynaconf import LazySettings
 
 settings = LazySettings(

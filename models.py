@@ -29,9 +29,9 @@ class TasksDB(BaseModel):
     class Meta:
         """Обязательный класс внутри базового класса БД."""
 
-        da_table = 'tasks'
+        db_table = 'tasks'
 
     id = PrimaryKeyField(primary_key=True)
-    title = CharField()
+    title = CharField(null=False)
     status = IntegerField()
     updated_at = DateTimeField(default=datetime.datetime.now)
