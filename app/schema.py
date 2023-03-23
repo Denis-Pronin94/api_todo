@@ -1,6 +1,7 @@
+import re
 from datetime import datetime
 from typing import Union
-import re
+
 from pydantic import BaseModel, validator
 
 
@@ -26,6 +27,7 @@ class UpdateTask(BaseModel):
 
 
 class ValuesTasks(BaseModel):
+    """Схема массива data."""
 
     id: int
     status: int
@@ -34,6 +36,7 @@ class ValuesTasks(BaseModel):
 
 
 class Response(BaseModel):
+    """Схема response."""
 
     data: Union[list[ValuesTasks], None]
     error: Union[str, None] = None

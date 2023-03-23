@@ -1,6 +1,6 @@
 import datetime
 
-from app.config import HOST, DATABASE, PASSWORD, PORT, USER
+from app.config import DATABASE, HOST, PASSWORD, PORT, USER
 
 from peewee import (
     CharField,
