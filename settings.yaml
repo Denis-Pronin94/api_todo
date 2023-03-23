@@ -1,4 +1,4 @@
-NAME: __required__
+DATABASE: __required__
 USER: __required__
 PASSWORD: __required__
 HOST: __required__

@@ -1,6 +1,6 @@
 import datetime
 
-from app.config import HOST, NAME, PASSWORD, PORT, USER
+from app.config import HOST, DATABASE, PASSWORD, PORT, USER
 
 from peewee import (
     CharField,
@@ -11,7 +11,7 @@ from peewee import (
     PrimaryKeyField,
 )
 
-db = PostgresqlDatabase(NAME, user=USER, password=PASSWORD, host=HOST, port=PORT)
+db = PostgresqlDatabase(DATABASE, user=USER, password=PASSWORD, host=HOST, port=PORT)
 
 
 class BaseModel(Model):

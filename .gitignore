@@ -4,3 +4,4 @@ migrations/
 # Ignore dynaconf secret files
 .secrets.*
 settings.local.yaml
+allure_report

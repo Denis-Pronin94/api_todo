@@ -13,7 +13,6 @@ class CreateNewTask(BaseModel):
     def name_task(cls, v: str) -> str:
         """Валидация name."""
         match = re.match(r'^[a-z, A-Z]\D*', v)
-        # breakpoint()
         if match is None:
             raise ValueError(
                 'Некорректное Имя. Имя должно содержать только латинские буквы (допускаются пробелы).')

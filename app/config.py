@@ -7,7 +7,7 @@ settings = LazySettings(
 settings.configure()
 
 HOST = settings['HOST']
-NAME = settings['NAME']
+DATABASE = settings['DATABASE']
 PASSWORD = settings['PASSWORD']
 PORT = settings['PORT']
 USER = settings['USER']

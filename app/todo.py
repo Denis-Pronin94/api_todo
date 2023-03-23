@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from flask import Flask, request
 
+from app.enums import TaskStatus
 from models import TasksDB
 
 from peewee import DataError
@@ -19,7 +20,7 @@ def create_new_task() -> [list, int]:
     """Эндпоинт создания таски."""
     try:
         task = CreateNewTask.parse_obj(request.json)
-        values = TasksDB.create(title=task.name, status=1)
+        values = TasksDB.create(title=task.name, status=TaskStatus.NEW.value)
         return Response(
             data=[dict(
                 id=values.id,
