@@ -8,8 +8,76 @@ packages = [{include = "api_todo"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pytest = "^7.2.2"
+peewee = "^3.16.0"
+pydantic = "^1.10.5"
+flask = "^2.2.3"
+postgres = "^4.0"
+psycopg2-binary = "^2.9.5"
+schemas = "^0.7.1"
+dynaconf = "^3.1.12"
+password = "^0.2"
+peewee-migrations = "^0.3.32"
+allure-pytest = "^2.13.1"
 
+
+[tool.poetry.group.dev.dependencies]
+flakeheaven = "^3.2.1"
+isort = "^5.12.0"
+flake8 = "4.0.1"
+flake8-commas = "^2.1.0"
+flake8-cognitive-complexity = "^0.1.0"
+flake8-annotations = "2.9.1"
+flake8-pie = "^0.16.0"
+flake8-simplify = "^0.19.3"
+flake8-expression-complexity = "^0.0.11"
+flake8-docstrings = "^1.7.0"
+flake8-typing-imports = "1.2"
+flake8-import-order = "^0.18.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flakeheaven]
+baseline = ".flakeheaven_baseline"
+exclude = [
+    ".git",
+    ".venv",
+    "reports/*"
+]
+max-line-length = 99
+max-complexity = 10
+suppress-none-returning = true
+show-source = true
+# flake8-quotes
+inline-quotes = "single"
+multiline-quotes = "double"
+
+[tool.flakeheaven.plugins]
+flake8-import-order = ["+*"]
+"flake8-*" = ["pem init+*"]
+pycodestyle = [
+    "+*",
+    "-W503",  # line break before binary operator
+]
+pyflakes = ["+*"] # это понадобилось для проверки 'Imported but unused'
+"flake8-annotations" = [
+    "+*",
+    "-ANN101",  # Missing type annotation for self in method
+    "-ANN102",  # Missing type annotation for cls in classmethod
+    "-ANN204",  # Missing return type annotation for special method
+]
+"flake8-docstrings" = [
+    "+*",
+    "-D100" # docs for imports
+]
+pylint = [
+    "+*",
+#    "-W0511",
+#    "-C0103", # Argument name doesn't conform to snake_case naming style
+#    "-C0116", # Docstrings for public methods
+#    "-C0115", # Missing class docstring
+#    "-C0114", # Missing module docstring
+#    "-R0903", # Too few public methods
+]
