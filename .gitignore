@@ -1,6 +1,5 @@
 .idea/
 __pycache__/
-migrations/
 # Ignore dynaconf secret files
 .secrets.*
 settings.local.yaml
